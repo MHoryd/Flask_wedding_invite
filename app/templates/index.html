@@ -53,23 +53,37 @@
         </form>
 
         <div id="flashMessage"></div>
+
+        <div id="loadingSpinner" style="display: none;">
+          Loading...
+        </div>
         <script>
           $(document).ready(function () {
-        $("#submitBtn").click(function (event) {
-          event.preventDefault();
-
-          $.ajax({
-            type: "POST", url: $("#myForm").attr("action"),data: $("#myForm").serialize(),
-                success: function (response) {
-                    if (response.success) {
-                        $("#flashMessage").html(response.message).css("color", "green").show();
-                    } else {
-                        $("#flashMessage").html(response.message).css("color", "red").show();
-                    }
-                }
-            });
-        });
-    });
+              $("#submitBtn").click(function (event) {
+                  event.preventDefault();
+  
+                  $("#loadingSpinner").show();
+      
+                  $.ajax({
+                      type: "POST",
+                      url: $("#myForm").attr("action"),
+                      data: $("#myForm").serialize(),
+                      success: function (response) {
+                          $("#loadingSpinner").hide();
+      
+                          if (response.success) {
+                              $("#flashMessage").html(response.message).css("color", "green").show();
+                          } else {
+                              $("#flashMessage").html(response.message).css("color", "red").show();
+                          }
+                      },
+                      complete: function () {
+                          $("#loadingSpinner").hide();
+                      }
+                  });
+              });
+          });
+      </script>
       </script>
       </div>
     </section>

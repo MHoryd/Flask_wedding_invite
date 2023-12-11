@@ -17,7 +17,6 @@ class Email_notifi():
 
 
     def send_message(self):
-        print(self.receivers)
         for receiver in self.receivers:
             msg = MIMEMultipart()
             msg['From'] = self.sender
