@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Ślub Marty i Michała</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/all.min.css') }}"> 
+    <link href="https://fonts.googleapis.com/css?family=Caveat|Quicksand&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="heading">
+        Marta & Michał
+        <span class="heading-subtext"> Pobieramy się!</span>
+      </h1>
+    </header>
+    <a data-scroll class="fixed-button" href="#rsvp" id="rsvpButton">RSVP</a> 
+    <section class="section">
+      {% if no_guests %}
+      <h2 class="sub-heading">Cześć!</h2>
+      {% else %}
+      <h2 class="sub-heading">Cześć {{first_guest}} oraz {{second_guest}}!</h2>
+      {% endif %}
+      <p>Jest nam niezmiernie miło zaprosić Was na nasz ślub. Poniżej znajdziecie kilka szczegółów co do lokalizacji oraz formularz który posimy wypełnić, tak abyśmy mogli dostosować menu do waszych potrzeb :)</p>
+    </section>
+    <section class="section">
+      <h2 class="sub-heading">Szczegóły naszego wielkiego dnia</h2>
+      <div class="details">
+        <i class="fas fa-calendar-check"></i>
+        <h3 class="details-heading">Kiedy?</h3>
+        <p>10 Sierpień 2024</p>
+      </div>
+      <div class="details">
+        <i class="fas fa-map-marked-alt"></i>
+        <h3 class="details-heading">Gdzie?</h3>
+        <p><a rel="noopener" href="https://www.boathouse.pl/" target="_blank">Boathouse</a>, Warszawa, Wał Miedzeszyński 389A</p>
+        <img class="resort-image" src="https://www.boathouse.pl/wp-content/uploads/2019/07/Ogr%C3%B3d-noc%C4%85-12.jpg" alt="Resort" />
+      </div>
+      <div class="details">
+        <i class="fas fa-reply"></i>
+        <h3 class="details-heading" id="rsvp">RSVP</h3>
+        <form id="myForm" method="POST", action="{{ url_for('main.process_form') }}">
+          {{ form.csrf_token }}
+          {{ form.Pole1.label }}
+          {{ form.Pole1 }}
+          {{ form.Pole2.label }}
+          {{ form.Pole2 }}
+          {{ form.Pole3.label }}
+          {{ form.Pole3 }}
+          <button type="button" id="submitBtn">Submit</button>
+        </form>
+
+        <div id="flashMessage"></div>
+        <script>
+          $(document).ready(function () {
+        $("#submitBtn").click(function (event) {
+          event.preventDefault();
+
+          $.ajax({
+            type: "POST", url: $("#myForm").attr("action"),data: $("#myForm").serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        $("#flashMessage").html(response.message).css("color", "green").show();
+                    } else {
+                        $("#flashMessage").html(response.message).css("color", "red").show();
+                    }
+                }
+            });
+        });
+    });
+      </script>
+      </div>
+    </section>
+    <script src="static/js/smooth-scroll.polyfills.min.js"></script>
+    <script defer>
+      var scroll = new SmoothScroll('a[href*="#"]');
+      var rsvpButton = document.getElementById('rsvpButton')
+      rsvpButton.addEventListener('click',hideButton,false);
+
+      function hideButton() {
+        rsvpButton.style.display = 'none';
+      }   
+    </script>
+  </body>
+</html>
