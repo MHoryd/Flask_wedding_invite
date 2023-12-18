@@ -23,7 +23,7 @@ def index_guests(url_num):
         if int(url) == url_num:
             first_guest = names_list[0]
             second_guest = names_list[1]
-        form.Pole1.data = f"{first_guest} and {second_guest}"
+    form.Pole1.data = f"{first_guest} and {second_guest}"
     return render_template('index.html', first_guest=first_guest,second_guest=second_guest, form=form)
 
 @bp.route('/process_form', methods=['POST'])
