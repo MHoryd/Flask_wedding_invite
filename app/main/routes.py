@@ -2,9 +2,7 @@ from app.main import bp
 from flask import render_template, request, jsonify
 from app.forms.form import RSVP_Form
 from app.main.mail import Email_notifi
-import json
-
-url_dict ={123:['AAA','BBB'],345:['CCC','DDD']}
+import json, os, ast
 
 
 @bp.route('/',methods=['GET'])
@@ -16,14 +14,15 @@ def index():
 
 @bp.route('/<int:url_num>', methods=['GET'])
 def index_guests(url_num):
+    guest_url_dict = ast.literal_eval(os.environ.get("guest_url_dict"))
     second_guest = None
     second_guest = None
     form = RSVP_Form()
-    for url, names_list in url_dict.items():
+    for url, names_list in guest_url_dict.items():
         if int(url) == url_num:
             first_guest = names_list[0]
             second_guest = names_list[1]
-    form.Pole1.data = f"{first_guest} and {second_guest}"
+    form.Pole1.data = f"{first_guest} oraz {second_guest}"
     return render_template('index.html', first_guest=first_guest,second_guest=second_guest, form=form)
 
 @bp.route('/process_form', methods=['POST'])
