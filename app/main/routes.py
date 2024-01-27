@@ -2,7 +2,9 @@ from app.main import bp
 from flask import render_template, request, jsonify
 from app.forms.form import RSVP_Form
 from app.main.mail import Email_notifi
+from app import limiter
 import json, os, ast, datetime
+
 
 
 @bp.route('/',methods=['GET'])
@@ -33,6 +35,7 @@ def index_guests(url_str):
     return render_template('index.html',form=form,guest=guest,one_guest=one_guest,two_guests=two_guests,multiple_guests=multiple_guests,no_guests=no_guests)
 
 @bp.route('/process_form', methods=['POST'])
+@limiter.limit("10 per minute")
 def process_form():
     form = RSVP_Form(request.form)
     success_msg = "Dzięki, wszystko się udało :)"
@@ -64,16 +67,18 @@ def process_form():
                     file.seek(0)
                     json.dump(existing_data, file, indent=2)
                     file.truncate()
-                    email_object = Email_notifi(answer)
-                    email_object.send_message()
+                    # email_object = Email_notifi(answer)
+                    # email_object.send_message()
                     return jsonify({'message': success_msg, "success": True })
             existing_data.append(answer)
             file.seek(0)
             json.dump(existing_data, file, indent=2)
             file.truncate()
-            email_object = Email_notifi(answer)
-            email_object.send_message()
+            # email_object = Email_notifi(answer)
+            # email_object.send_message()
             return jsonify({'message': success_msg, "success": True })
     else:
         error_msg = "Nie wszystkie pola zostały uzupełnione"
         return jsonify({'message':error_msg,"success": False})
+    
+

@@ -89,8 +89,14 @@
                               $("#flashMessage").html(response.message).css("color", "red").show();
                           }
                       },
-                      complete: function () {
+                      error: function (xhr) {
                           $("#loadingSpinner").hide();
+
+                          if (xhr.status == 429) {
+                            $('#flashMessage').html('Za dużo prób, spróbuj za mnutę.').css("color", "red").show();
+                          } else {
+                            $('#flashMessage').html('Błąd którego nie oczekiwałem. Najlepiej napisz do Nas na messengerze ;)').css("color", "red").show();
+                          }
                       }
                   });
               });
