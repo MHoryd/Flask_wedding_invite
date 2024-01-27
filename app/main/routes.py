@@ -38,11 +38,7 @@ def index_guests(url_str):
 @limiter.limit("10 per minute")
 def process_form():
     form = RSVP_Form(request.form)
-    success_msg = "Dzięki, wszystko się udało :)"
-    if form.validate():
-        with open("answers.json", 'r+') as file:
-            existing_data = json.load(file)
-            answer = {
+    answer = {
                 "Guest":form.data.get("Field1"),
                 "Edited":False,
                 "Datetime":str(datetime.datetime.now()),
@@ -53,12 +49,25 @@ def process_form():
                 "Field4":form.data.get("Field4")
                 }
             }
+    if form.validate():
+        response_msg = handle_json_data(answer)
+        return jsonify(response_msg)
+    else:
+        error_msg = "Nie wszystkie pola zostały uzupełnione"
+        return jsonify({'message':error_msg,"success": False})
+    
+
+def handle_json_data(answer):
+    success_msg = "Dzięki, wszystko się udało :)"
+    with open("answers.json", 'r+') as file:
+            existing_data = json.load(file)
             for index, dict in enumerate(existing_data):
                 if dict['Guest'] == answer['Guest'] and dict['Answers'] == answer['Answers']:
                     error_msg = "Już mam tą odpowiedź ;)"
-                    return jsonify({'message':error_msg,"success": False})
+                    return {'message':error_msg,"success": False}
                 elif dict['Guest'] == answer['Guest']:
                     success_msg = "Dzięki, wszystko się udało, zmieniłem odpowiedź :)"
+                    answer["Edited"]=True
                     existing_data[index]['Answers']['Field2'] = answer["Answers"]["Field2"]
                     existing_data[index]['Answers']['Field3'] = answer["Answers"]["Field3"]
                     existing_data[index]['Answers']['Field4'] = answer["Answers"]["Field4"]
@@ -67,18 +76,14 @@ def process_form():
                     file.seek(0)
                     json.dump(existing_data, file, indent=2)
                     file.truncate()
-                    # email_object = Email_notifi(answer)
-                    # email_object.send_message()
-                    return jsonify({'message': success_msg, "success": True })
+                    email_object = Email_notifi(answer)
+                    email_object.send_message()
+                    return {'message': success_msg, "success": True }
             existing_data.append(answer)
             file.seek(0)
             json.dump(existing_data, file, indent=2)
             file.truncate()
-            # email_object = Email_notifi(answer)
-            # email_object.send_message()
-            return jsonify({'message': success_msg, "success": True })
-    else:
-        error_msg = "Nie wszystkie pola zostały uzupełnione"
-        return jsonify({'message':error_msg,"success": False})
-    
-
+            email_object = Email_notifi(answer)
+            email_object.send_message()
+            return {'message': success_msg, "success": True}
+            

@@ -30,8 +30,6 @@ class Email_notifi():
                 server.login(self.sender, self.password)
                 server.sendmail(self.sender,receiver,msg.as_string())
                 server.quit()
-                # for testing purposes
-                break
             except Exception as e:
                 print(f"Error: Unable to establish an SMTP connection{datetime.now()}")
                 print(e)
