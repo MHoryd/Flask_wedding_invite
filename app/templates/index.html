@@ -20,10 +20,20 @@
     <section class="section">
       {% if no_guests %}
       <h2 class="sub-heading">Cześć!</h2>
-      {% else %}
-      <h2 class="sub-heading">Cześć {{first_guest}} oraz {{second_guest}}!</h2>
+      {% elif one_guest %}
+      <h2 class="sub-heading">Cześć {{guest}}!</h2>
+      {% elif two_guests %}
+      <h2 class="sub-heading">Cześć {{two_guests[0]}} oraz {{two_guests[1]}}!</h2>
+      {% elif multiple_guests %}
+      <h2 class="sub-heading">Cześć {% if multiple_guests %}{{ multiple_guests | join(', ') }}{% endif %}!</h2>
       {% endif %}
-      <p>Jest nam niezmiernie miło zaprosić Was na nasz ślub. Poniżej znajdziecie kilka szczegółów co do lokalizacji oraz formularz który posimy wypełnić, tak abyśmy mogli dostosować menu do waszych potrzeb :)</p>
+      {% if one_guest %}
+      <p>Jest nam niezmiernie miło zaprosić Cię na nasz ślub. Poniżej znajdziesz kilka szczegółów co do lokalizacji oraz formularz który posimy wypełnić, tak abyśmy mogli dostosować menu do waszych potrzeb. Jeżeli cokolwiek się zmieni,
+        formularz możesz wypełnić też później. Dostaniemy aktualizację :)</p>
+      {% else %}
+      <p>Jest nam niezmiernie miło zaprosić Was na nasz ślub. Poniżej znajdziecie kilka szczegółów co do lokalizacji oraz formularz który posimy wypełnić, tak abyśmy mogli dostosować menu do waszych potrzeb. Jeżeli cokolwiek się zmieni,
+        formularz możecie wypełnić też później. Dostaniemy aktualizację :)</p>
+      {% endif %}
     </section>
     <section class="section">
       <h2 class="sub-heading">Szczegóły naszego wielkiego dnia</h2>
@@ -43,12 +53,14 @@
         <h3 class="details-heading" id="rsvp">RSVP</h3>
         <form id="myForm" method="POST", action="{{ url_for('main.process_form') }}">
           {{ form.csrf_token }}
-          {{ form.Pole1.label }}
-          {{ form.Pole1 }}
-          {{ form.Pole2.label }}
-          {{ form.Pole2 }}
-          {{ form.Pole3.label }}
-          {{ form.Pole3 }}
+          {{ form.Field1.label }}
+          {{ form.Field1 }}
+          {{ form.Field2.label }}
+          {{ form.Field2 }}
+          {{ form.Field3.label }}
+          {{ form.Field3 }}
+          {{ form.Field4.label }}
+          {{ form.Field4 }}
           <button type="button" id="submitBtn">Prześlij</button>
         </form>
 
