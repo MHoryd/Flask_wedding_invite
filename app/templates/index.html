@@ -46,21 +46,104 @@
         <i class="fas fa-map-marked-alt"></i>
         <h3 class="details-heading">Gdzie?</h3>
         <p><a rel="noopener" href="https://www.boathouse.pl/" target="_blank">Boathouse</a>, Warszawa, Wał Miedzeszyński 389A</p>
-        <img class="resort-image" src="https://www.boathouse.pl/wp-content/uploads/2019/07/Ogr%C3%B3d-noc%C4%85-12.jpg" alt="Resort" />
+        <img class="resort-image" src="https://chrzcinyikomunie.pl/uploads/boathouse-restaurant-and-garden-lounge/zdjecie-prezentacji-boathouse-restaurant-and-garden-lounge-ver99.jpeg" alt="Resort" />
       </div>
       <div class="details">
         <i class="fas fa-reply"></i>
         <h3 class="details-heading" id="rsvp">RSVP</h3>
         <form id="myForm" method="POST", action="{{ url_for('main.process_form') }}">
+          {% if no_guests %}
+          
           {{ form.csrf_token }}
-          {{ form.Field1.label }}
-          {{ form.Field1 }}
-          {{ form.Field2.label }}
-          {{ form.Field2 }}
-          {{ form.Field3.label }}
-          {{ form.Field3 }}
-          {{ form.Field4.label }}
-          {{ form.Field4 }}
+          {{ form.base_form.Field1.label }}
+          {{ form.base_form.Field1 }}
+          {{ form.base_form.Field2.label }}
+          {{ form.base_form.Field2 }}
+          {{ form.base_form.Field3.label }}
+          {{ form.base_form.Field3 }}
+          {{ form.base_form.Field4.label }}
+          {{ form.base_form.Field4 }}
+          {{ form.Field5.label }}
+          {{ form.Field5 }}
+          {{ form.base_form.Field9.label }}
+          {{ form.base_form.Field9 }}
+          {{ form.form_type(value='AnonymForm') }}
+
+
+          {% elif one_guest %}
+
+          {{ form.csrf_token }}
+          {{ form.base_form.Field1.label }}
+          {{ form.base_form.Field1 }}
+          {{ form.base_form.Field2.label }}
+          {{ form.base_form.Field2 }}
+          {{ form.base_form.Field3.label }}
+          {{ form.base_form.Field3 }}
+          {{ form.base_form.Field4.label }}
+          {{ form.base_form.Field4 }}
+          {{ form.Field5.label }}
+          {{ form.Field5 }}
+          {{ form.Field6.label }}
+          {{ form.Field6 }}
+          {{ form.Field7.label }}
+          {{ form.Field7 }}
+          {{ form.base_form.Field9.label }}
+          {{ form.base_form.Field9 }}
+          {{ form.form_type(value='OneGuestForm') }}
+
+
+          {% elif two_guests %}
+
+          {{ form.csrf_token }}
+          {{ form.base_form.Field1.label }}
+          {{ form.base_form.Field1 }}
+          {{ form.base_form.Field2.label }}
+          {{ form.base_form.Field2 }}
+          {{ form.base_form.Field3.label }}
+          {{ form.base_form.Field3 }}
+          {{ form.base_form.Field4.label }}
+          {{ form.base_form.Field4 }}
+          {{ form.Field5.label }}
+          {{two_guests[0]}}
+          {{ form.Field5 }}
+          {{ form.Field6.label }}
+          {{two_guests[1]}}
+          {{ form.Field6 }}
+          {{ form.base_form.Field9.label }}
+          {{ form.base_form.Field9 }}
+          {{ form.form_type(value='TwoGuestForm') }}
+
+
+          {% elif multiple_guests %}
+
+          {{ form.csrf_token }}
+          {{ form.base_form.Field1.label }}
+          {{ form.base_form.Field1 }}
+          {{ form.base_form.Field2.label }}
+          {{ form.base_form.Field2 }}
+          {{ form.base_form.Field3.label }}
+          {{ form.base_form.Field3 }}
+          {{ form.base_form.Field4.label }}
+          {{ form.base_form.Field4 }}
+          {{ form.Field5.label }}
+          {{multiple_guests[0]}}
+          {{ form.Field5 }}
+          {{ form.Field6.label }}
+          {{multiple_guests[1]}}
+          {{ form.Field6 }}
+          {{ form.Field7.label }}
+          {{multiple_guests[2]}}
+          {{ form.Field7 }}
+          {{ form.Field8.label }}
+          {{multiple_guests[3]}}
+          {{ form.Field8 }}
+          {{ form.base_form.Field9.label }}
+          {{ form.base_form.Field9 }}
+          {{ form.form_type(value='MultipeGuestForm') }}
+
+
+
+          {% endif %}
           <button type="button" id="submitBtn">Prześlij</button>
         </form>
 
@@ -95,7 +178,7 @@
                           if (xhr.status == 429) {
                             $('#flashMessage').html('Za dużo prób, spróbuj za mnutę.').css("color", "red").show();
                           } else {
-                            $('#flashMessage').html('Błąd którego nie oczekiwałem. Najlepiej napisz do Nas na messengerze ;)').css("color", "red").show();
+                            $('#flashMessage').html('Wystąpił błąd którego nie oczekiwałem. Najlepiej napisz do nas na messengerze ;)').css("color", "red").show();
                           }
                       }
                   });
