@@ -90,7 +90,7 @@ def format_form_data(data, type):
         base_answer["Answers"]["Main_dish_details_first_guest"]=data.get("Field5")
         base_answer["Answers"]["Main_dish_details_second_guest"]=data.get("Field6")
         base_answer["Answers"]["Main_dish_details_third_guest"]=data.get("Field7")
-        base_answer["Answers"]["Main_dish_details_fourthd_guest"]=data.get("Field8")
+        base_answer["Answers"]["Main_dish_details_fourth_guest"]=data.get("Field8")
     return base_answer
 
 def handle_json_data(answer, type):
@@ -98,6 +98,8 @@ def handle_json_data(answer, type):
     with open("answers.json", 'r+') as file:
             existing_data = json.load(file)
             for index, dict in enumerate(existing_data):
+                print(dict['Answers'])
+                print(answer['Answers'])
                 if dict['Guest'] == answer['Guest'] and dict['Answers'] == answer['Answers']:
                     error_msg = "Już mam tą odpowiedź ;)"
                     return {'message':error_msg,"success": False}
@@ -118,9 +120,11 @@ def handle_json_data(answer, type):
                         existing_data[index]["Answers"]["Main_dish_details_second_guest"]=answer["Answers"]["Main_dish_details_second_guest"]
                     elif type == 'MultipeGuestForm':
                         existing_data[index]["Answers"]["Main_dish_details_first_guest"]=answer["Answers"]["Main_dish_details_first_guest"]
-                        existing_data[index]["Answers"]["Main_dish_details_first_guest"]=answer["Answers"]["Main_dish_details_first_guest"]
+                        existing_data[index]["Answers"]["Main_dish_details_second_guest"]=answer["Answers"]["Main_dish_details_second_guest"]
                         existing_data[index]["Answers"]["Main_dish_details_third_guest"]=answer["Answers"]["Main_dish_details_third_guest"]
-                        existing_data[index]["Answers"]["Main_dish_details_fourthd_guest"]=answer["Answers"]["Main_dish_details_fourthd_guest"]
+                        existing_data[index]["Answers"]["Main_dish_details_fourth_guest"]=answer["Answers"]["Main_dish_details_fourth_guest"]
+                    elif type == 'AnonymForm':
+                        existing_data[index]['Answers']['Main_dish_details']=answer['Answers']['Main_dish_details']
                     file.seek(0)
                     json.dump(existing_data, file, indent=2)
                     file.truncate()
