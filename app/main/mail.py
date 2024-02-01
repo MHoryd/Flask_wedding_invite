@@ -33,7 +33,6 @@ class Email_notifi():
             except Exception as e:
                 print(f"Error: Unable to establish an SMTP connection{datetime.now()}")
                 print(e)
-            break
 
 
     def format_message(self):
