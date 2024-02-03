@@ -93,49 +93,65 @@ def format_form_data(data, type):
         base_answer["Answers"]["Main_dish_details_fourth_guest"]=data.get("Field8")
     return base_answer
 
-def handle_json_data(answer, type):
+
+def handle_json_data(answer,form_type):
+    existing_data = load_existing_data()
+    return save_data(existing_data,answer,form_type)
+    
+
+def load_existing_data():
+    try:
+        with open("answers.json", 'r') as file:
+            return json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+
+def save_data(existing_data, answer, type):
     success_msg = "Dzięki, wszystko się udało :)"
-    with open("answers.json", 'r+') as file:
-            existing_data = json.load(file)
-            for index, dict in enumerate(existing_data):
-                print(dict['Answers'])
-                print(answer['Answers'])
-                if dict['Guest'] == answer['Guest'] and dict['Answers'] == answer['Answers']:
-                    error_msg = "Już mam tą odpowiedź ;)"
-                    return {'message':error_msg,"success": False}
-                elif dict['Guest'] == answer['Guest']:
-                    success_msg = "Dzięki, wszystko się udało, zmieniłem odpowiedź :)"
-                    existing_data[index]["Edited"]=True
-                    existing_data[index]['Datetime']=str(datetime.datetime.now())
-                    existing_data[index]['Answers']['Will_attend'] = answer["Answers"]["Will_attend"]
-                    existing_data[index]['Answers']['Contact_email'] = answer["Answers"]["Contact_email"]
-                    existing_data[index]['Answers']['Alimentary_exclusion'] = answer["Answers"]["Alimentary_exclusion"]
-                    existing_data[index]['Answers']['Comment'] = answer["Answers"]["Comment"]
-                    if type == 'OneGuestForm':
-                        existing_data[index]["Answers"]["Main_dish_details_for_main_guest"]=answer["Answers"]["Main_dish_details_for_main_guest"]
-                        existing_data[index]["Answers"]["accompanying_person"]=answer["Answers"]["accompanying_person"]
-                        existing_data[index]["Answers"]["accompanying_person_details"]=answer["Answers"]["accompanying_person_details"]
-                    elif type == 'TwoGuestForm':
-                        existing_data[index]["Answers"]["Main_dish_details_first_guest"]=answer["Answers"]["Main_dish_details_first_guest"]
-                        existing_data[index]["Answers"]["Main_dish_details_second_guest"]=answer["Answers"]["Main_dish_details_second_guest"]
-                    elif type == 'MultipeGuestForm':
-                        existing_data[index]["Answers"]["Main_dish_details_first_guest"]=answer["Answers"]["Main_dish_details_first_guest"]
-                        existing_data[index]["Answers"]["Main_dish_details_second_guest"]=answer["Answers"]["Main_dish_details_second_guest"]
-                        existing_data[index]["Answers"]["Main_dish_details_third_guest"]=answer["Answers"]["Main_dish_details_third_guest"]
-                        existing_data[index]["Answers"]["Main_dish_details_fourth_guest"]=answer["Answers"]["Main_dish_details_fourth_guest"]
-                    elif type == 'AnonymForm':
-                        existing_data[index]['Answers']['Main_dish_details']=answer['Answers']['Main_dish_details']
-                    file.seek(0)
+    for index, dict in enumerate(existing_data):
+        if dict['Guest'] == answer['Guest'] and dict['Answers'] == answer['Answers']:
+            error_msg = "Już mam tą odpowiedź ;)"
+            return {'message':error_msg,"success": False}
+        elif dict['Guest'] == answer['Guest']:
+            success_msg = "Dzięki, wszystko się udało, zmieniłem odpowiedź :)"
+            existing_data[index]["Edited"]=True
+            existing_data[index]['Datetime']=str(datetime.datetime.now())
+            existing_data[index]['Answers']['Will_attend'] = answer["Answers"]["Will_attend"]
+            existing_data[index]['Answers']['Contact_email'] = answer["Answers"]["Contact_email"]
+            existing_data[index]['Answers']['Alimentary_exclusion'] = answer["Answers"]["Alimentary_exclusion"]
+            existing_data[index]['Answers']['Comment'] = answer["Answers"]["Comment"]
+            if type == 'OneGuestForm':
+                existing_data[index]["Answers"]["Main_dish_details_for_main_guest"]=answer["Answers"]["Main_dish_details_for_main_guest"]
+                existing_data[index]["Answers"]["accompanying_person"]=answer["Answers"]["accompanying_person"]
+                existing_data[index]["Answers"]["accompanying_person_details"]=answer["Answers"]["accompanying_person_details"]
+            elif type == 'TwoGuestForm':
+                existing_data[index]["Answers"]["Main_dish_details_first_guest"]=answer["Answers"]["Main_dish_details_first_guest"]
+                existing_data[index]["Answers"]["Main_dish_details_second_guest"]=answer["Answers"]["Main_dish_details_second_guest"]
+            elif type == 'MultipeGuestForm':
+                existing_data[index]["Answers"]["Main_dish_details_first_guest"]=answer["Answers"]["Main_dish_details_first_guest"]
+                existing_data[index]["Answers"]["Main_dish_details_second_guest"]=answer["Answers"]["Main_dish_details_second_guest"]
+                existing_data[index]["Answers"]["Main_dish_details_third_guest"]=answer["Answers"]["Main_dish_details_third_guest"]
+                existing_data[index]["Answers"]["Main_dish_details_fourth_guest"]=answer["Answers"]["Main_dish_details_fourth_guest"]
+            elif type == 'AnonymForm':
+                existing_data[index]['Answers']['Main_dish_details']=answer['Answers']['Main_dish_details']
+            try:
+                with open("answers.json",'w') as file:
                     json.dump(existing_data, file, indent=2)
-                    file.truncate()
-                    email_object = Email_notifi(answer)
-                    email_object.send_message()
-                    return {'message': success_msg, "success": True }
-            existing_data.append(answer)
-            file.seek(0)
-            json.dump(existing_data, file, indent=2)
-            file.truncate()
+            except:
+                pass
             email_object = Email_notifi(answer)
             email_object.send_message()
-            return {'message': success_msg, "success": True}
+            return {'message': success_msg, "success": True }
+    try:
+        with open("answers.json",'w') as file:
+            existing_data.append(answer)
+            json.dump(existing_data, file, indent=2)
+    except:
+        pass
+    email_object = Email_notifi(answer)
+    email_object.send_message()
+    return {'message': success_msg, "success": True}
+
+
             
