@@ -16,7 +16,7 @@ def index():
 
 @bp.route('/<url_str>', methods=['GET'])
 def index_guests(url_str):
-    guest_url_dict = ast.literal_eval(os.environ.get("guest_url_dict"))
+    guest_url_dict = ast.literal_eval(os.getenv("guest_url_dict"))
     guest,one_guest,two_guests,multiple_guests,no_guests = None,None,None,None,None
     visiting_guests = [guest for key, guests in guest_url_dict.items() if str(key) == url_str for guest in guests]
     if len(visiting_guests) == 0:

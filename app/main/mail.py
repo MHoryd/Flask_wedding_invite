@@ -1,37 +1,34 @@
-from smtplib import SMTP
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from datetime import datetime
-import os
+import os,requests
 
 
 class Email_notifi():
     
 
     def __init__(self, form_data):
-        self.sender = os.environ.get('Notification_email')
-        self.receivers = os.environ.get('Notification_receivers_email').split(',')
-        self.password = os.environ.get('Notification_pass')
-        self.smtp_server = os.environ.get('Notification_smtp_server')
+        self.sender = os.getenv('Notification_email')
+        self.receivers = os.getenv('Notification_receivers_email').split(',')
+        self.password = os.getenv('Notification_pass')
         self.form_data = form_data
+        self.url = os.getenv('Notification_api_url')
 
 
     def send_message(self):
         for receiver in self.receivers:
-            msg = MIMEMultipart()
-            msg['From'] = self.sender
-            msg['To'] = receiver
-            msg['Subject'] = f"Odpowiedź z formularza ślubnego {datetime.now().date()}"
-            body = self.format_message()
-            msg.attach(MIMEText(body, 'plain'))
+            print(receiver)
+            print(self.password)
             try:
-                server = SMTP(self.smtp_server)
-                server.starttls()
-                server.login(self.sender, self.password)
-                server.sendmail(self.sender,receiver,msg.as_string())
-                server.quit()
-            except Exception as e:
-                print(f"Error: Unable to establish an SMTP connection{datetime.now()}")
+                request = requests.post(
+                    self.url,
+                    auth=("api",f"{self.password}"),
+                    data={
+                        "from":f'Wedding {self.sender}',
+                        "to":[receiver],
+                        "subject":f"Odpowiedź z formularza ślubnego {datetime.now().date()}",
+                        "text":self.format_message()
+                        })
+                request.raise_for_status()
+            except requests.exceptions.HTTPError as e:
                 print(e)
 
 
