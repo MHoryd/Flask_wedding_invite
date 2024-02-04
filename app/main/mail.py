@@ -15,8 +15,6 @@ class Email_notifi():
 
     def send_message(self):
         for receiver in self.receivers:
-            print(receiver)
-            print(self.password)
             try:
                 request = requests.post(
                     self.url,
