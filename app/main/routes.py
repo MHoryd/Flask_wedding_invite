@@ -140,7 +140,7 @@ def save_data(existing_data, answer, type):
                     json.dump(existing_data, file, indent=2)
             except:
                 pass
-            email_object = Email_notifi(answer)
+            email_object = Email_notifi(existing_data[index])
             email_object.send_message()
             return {'message': success_msg, "success": True }
     try:
