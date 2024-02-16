@@ -17,6 +17,11 @@ def index():
 @bp.route('/<url_str>', methods=['GET'])
 def index_guests(url_str):
     guest_url_dict = ast.literal_eval(os.getenv("guest_url_dict"))
+    hotel_enabled = ast.literal_eval(os.getenv("hotel_enabled"))
+    if url_str in hotel_enabled:
+        hotel = True
+    else:
+        hotel = False
     guest,one_guest,two_guests,multiple_guests,no_guests = None,None,None,None,None
     visiting_guests = [guest for key, guests in guest_url_dict.items() if str(key) == url_str for guest in guests]
     if len(visiting_guests) == 0:
@@ -37,7 +42,7 @@ def index_guests(url_str):
         form.base_form.Field1.data = f"{','.join(visiting_guests)}"
     else:
         no_guests = True 
-    return render_template('index.html',form=form,guest=guest,one_guest=one_guest,two_guests=two_guests,multiple_guests=multiple_guests,no_guests=no_guests)
+    return render_template('index.html',form=form,guest=guest,one_guest=one_guest,two_guests=two_guests,multiple_guests=multiple_guests,no_guests=no_guests,hotel=hotel)
 
 @bp.route('/process_form', methods=['POST'])
 @limiter.limit("10 per minute")

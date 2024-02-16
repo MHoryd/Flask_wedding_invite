@@ -7,6 +7,52 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/all.min.css') }}"> 
     <link href="https://fonts.googleapis.com/css?family=Caveat|Quicksand&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+      $(document).ready(function () {
+          $("#submitBtn").click(function (event) {
+              event.preventDefault();
+
+              $("#loadingSpinner").show();
+  
+              $.ajax({
+                  type: "POST",
+                  url: $("#myForm").attr("action"),
+                  data: $("#myForm").serialize(),
+                  success: function (response) {
+                      $("#loadingSpinner").hide();
+  
+                      if (response.success) {
+                          $("#flashMessage").html(response.message).css("color", "green").show();
+                      } else {
+                          $("#flashMessage").html(response.message).css("color", "red").show();
+                      }
+                  },
+                  error: function (xhr) {
+                      $("#loadingSpinner").hide();
+
+                      if (xhr.status == 429) {
+                        $('#flashMessage').html('Za dużo prób, spróbuj za mnutę.').css("color", "red").show();
+                      } else {
+                        $('#flashMessage').html('Wystąpił błąd którego nie oczekiwałem. Najlepiej napisz do nas na messengerze ;)').css("color", "red").show();
+                      }
+                  }
+              });
+          });
+      });
+  </script>
+  </script>
+  </div>
+</section>
+<script src="static/js/smooth-scroll.polyfills.min.js"></script>
+<script defer>
+  var scroll = new SmoothScroll('a[href*="#"]');
+  var rsvpButton = document.getElementById('rsvpButton')
+  rsvpButton.addEventListener('click',hideButton,false);
+
+  function hideButton() {
+    rsvpButton.style.display = 'none';
+  }   
+</script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
@@ -17,6 +63,7 @@
       </h1>
     </header>
     <a data-scroll class="fixed-button" href="#rsvp" id="rsvpButton">RSVP</a> 
+    <div class="background">
     <section class="section">
       {% if no_guests %}
       <h2 class="sub-heading">Cześć!</h2>
@@ -34,20 +81,27 @@
       <p>Jest nam niezmiernie miło zaprosić Was na nasz ślub. Poniżej znajdziecie kilka szczegółów co do lokalizacji oraz formularz który posimy wypełnić, tak abyśmy mogli dostosować menu do waszych potrzeb. Jeżeli cokolwiek się zmieni,
         formularz możecie wypełnić też później. Dostaniemy aktualizację :)</p>
       {% endif %}
-    </section>
-    <section class="section">
+    <!-- </section>
+    <section class="section"> -->
       <h2 class="sub-heading">Szczegóły naszego wielkiego dnia</h2>
       <div class="details">
         <i class="fas fa-calendar-check"></i>
         <h3 class="details-heading">Kiedy?</h3>
         <p>10 Sierpień 2024</p>
+        <p>Godzina 16:00</p>
       </div>
       <div class="details">
         <i class="fas fa-map-marked-alt"></i>
         <h3 class="details-heading">Gdzie?</h3>
         <p><a rel="noopener" href="https://www.boathouse.pl/" target="_blank">Boathouse</a>, Warszawa, Wał Miedzeszyński 389A</p>
-        <img class="resort-image" src="https://chrzcinyikomunie.pl/uploads/boathouse-restaurant-and-garden-lounge/zdjecie-prezentacji-boathouse-restaurant-and-garden-lounge-ver99.jpeg" alt="Resort" />
+        <!-- <img class="resort-image" src="https://fastly.4sqi.net/img/general/600x600/59012131_nON2mkA4b3IQSITJVybGPx9P7ZM4cTRAgnC-PyfyNwY.jpg" alt="Resort" /> -->
       </div>
+      {% if hotel %}
+      <div class="details">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 32C0 14.3 14.3 0 32 0H480c17.7 0 32 14.3 32 32s-14.3 32-32 32V448c17.7 0 32 14.3 32 32s-14.3 32-32 32H304V464c0-26.5-21.5-48-48-48s-48 21.5-48 48v48H32c-17.7 0-32-14.3-32-32s14.3-32 32-32V64C14.3 64 0 49.7 0 32zm96 80v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V112c0-8.8-7.2-16-16-16H112c-8.8 0-16 7.2-16 16zM240 96c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V112c0-8.8-7.2-16-16-16H240zm112 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V112c0-8.8-7.2-16-16-16H368c-8.8 0-16 7.2-16 16zM112 192c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V208c0-8.8-7.2-16-16-16H112zm112 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V208c0-8.8-7.2-16-16-16H240c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V208c0-8.8-7.2-16-16-16H368zM328 384c13.3 0 24.3-10.9 21-23.8c-10.6-41.5-48.2-72.2-93-72.2s-82.5 30.7-93 72.2c-3.3 12.8 7.8 23.8 21 23.8H328z"fill="#444444"/></svg>
+        <h3 class="details-heading">Hotel</h3>
+      </div>
+      {% endif %}
       <div class="details">
         <i class="fas fa-reply"></i>
         <h3 class="details-heading" id="rsvp">RSVP</h3>
@@ -152,51 +206,7 @@
         <div id="loadingSpinner" style="display: none;">
           Chwileczkę...
         </div>
-        <script>
-          $(document).ready(function () {
-              $("#submitBtn").click(function (event) {
-                  event.preventDefault();
-  
-                  $("#loadingSpinner").show();
-      
-                  $.ajax({
-                      type: "POST",
-                      url: $("#myForm").attr("action"),
-                      data: $("#myForm").serialize(),
-                      success: function (response) {
-                          $("#loadingSpinner").hide();
-      
-                          if (response.success) {
-                              $("#flashMessage").html(response.message).css("color", "green").show();
-                          } else {
-                              $("#flashMessage").html(response.message).css("color", "red").show();
-                          }
-                      },
-                      error: function (xhr) {
-                          $("#loadingSpinner").hide();
-
-                          if (xhr.status == 429) {
-                            $('#flashMessage').html('Za dużo prób, spróbuj za mnutę.').css("color", "red").show();
-                          } else {
-                            $('#flashMessage').html('Wystąpił błąd którego nie oczekiwałem. Najlepiej napisz do nas na messengerze ;)').css("color", "red").show();
-                          }
-                      }
-                  });
-              });
-          });
-      </script>
-      </script>
-      </div>
-    </section>
-    <script src="static/js/smooth-scroll.polyfills.min.js"></script>
-    <script defer>
-      var scroll = new SmoothScroll('a[href*="#"]');
-      var rsvpButton = document.getElementById('rsvpButton')
-      rsvpButton.addEventListener('click',hideButton,false);
-
-      function hideButton() {
-        rsvpButton.style.display = 'none';
-      }   
-    </script>
+      </section>
+    </div>
   </body>
 </html>
