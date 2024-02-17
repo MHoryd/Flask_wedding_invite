@@ -3,12 +3,14 @@
     font-size: 16px;
     color: #222;
 }
+
 html, body{
     margin: 0;
     height: 100vh;
     text-align: center;
     background-color:rgb(204, 219, 202);
 }
+
 .header{
     background-image: url(./mm.jpg);
     background-repeat: no-repeat;
@@ -91,13 +93,11 @@ html, body{
   }
 
 
-/* Form styling */
 form {
     display: flex;
     flex-direction: column;
   }
   
-  /* Input styling */
   label {
     font-weight: bold;
     margin-bottom: 8px;
@@ -114,7 +114,6 @@ form {
     background-color: #fff;
   }
   
-  /* Button styling */
   button {
     background-color: #3498db;
     color: #fff;
@@ -136,7 +135,6 @@ form {
     
   }
   
-  /* Optional: Add some responsive styling */
   @media screen and (max-width: 600px) {
     .form-container {
       width: 90%;

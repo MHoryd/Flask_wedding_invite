@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,SelectField,FormField, HiddenField
 from wtforms.validators import DataRequired, Length
 
-food_choices = ['Ryba','Mięso','Wege']
+food_choices = ['Ryba','Mięso']
 
 class BaseForm(FlaskForm):
 
