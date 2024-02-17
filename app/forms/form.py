@@ -15,7 +15,7 @@ class BaseForm(FlaskForm):
 
 class AnonymForm(FlaskForm):
     base_form = FormField(BaseForm)
-    Field5 = StringField(label="Danie główne czyli dla kogo: Ryba,Mięso lub Wege",validators=[DataRequired(),Length(max=255)])
+    Field5 = StringField(label="Danie główne czyli dla kogo: ryba lub mięso",validators=[DataRequired(),Length(max=255)])
     form_type = HiddenField()
 
 
