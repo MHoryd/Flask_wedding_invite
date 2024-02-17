@@ -7,40 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/all.min.css') }}"> 
     <link href="https://fonts.googleapis.com/css?family=Caveat|Quicksand&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-      $(document).ready(function () {
-          $("#submitBtn").click(function (event) {
-              event.preventDefault();
-
-              $("#loadingSpinner").show();
-  
-              $.ajax({
-                  type: "POST",
-                  url: $("#myForm").attr("action"),
-                  data: $("#myForm").serialize(),
-                  success: function (response) {
-                      $("#loadingSpinner").hide();
-  
-                      if (response.success) {
-                          $("#flashMessage").html(response.message).css("color", "green").show();
-                      } else {
-                          $("#flashMessage").html(response.message).css("color", "red").show();
-                      }
-                  },
-                  error: function (xhr) {
-                      $("#loadingSpinner").hide();
-
-                      if (xhr.status == 429) {
-                        $('#flashMessage').html('Za dużo prób, spróbuj za mnutę.').css("color", "red").show();
-                      } else {
-                        $('#flashMessage').html('Wystąpił błąd którego nie oczekiwałem. Najlepiej napisz do nas na messengerze ;)').css("color", "red").show();
-                      }
-                  }
-              });
-          });
-      });
-  </script>
-  </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   </div>
 </section>
 <script src="static/js/smooth-scroll.polyfills.min.js"></script>
@@ -81,8 +48,6 @@
       <p>Jest nam niezmiernie miło zaprosić Was na nasz ślub. Poniżej znajdziecie kilka szczegółów co do lokalizacji oraz formularz który posimy wypełnić, tak abyśmy mogli dostosować menu do waszych potrzeb. Jeżeli cokolwiek się zmieni,
         formularz możecie wypełnić też później. Dostaniemy aktualizację :)</p>
       {% endif %}
-    <!-- </section>
-    <section class="section"> -->
       <h2 class="sub-heading">Szczegóły naszego wielkiego dnia</h2>
       <div class="details">
         <i class="fas fa-calendar-check"></i>
@@ -94,7 +59,7 @@
         <i class="fas fa-map-marked-alt"></i>
         <h3 class="details-heading">Gdzie?</h3>
         <p><a rel="noopener" href="https://www.boathouse.pl/" target="_blank">Boathouse</a>, Warszawa, Wał Miedzeszyński 389A</p>
-        <!-- <img class="resort-image" src="https://fastly.4sqi.net/img/general/600x600/59012131_nON2mkA4b3IQSITJVybGPx9P7ZM4cTRAgnC-PyfyNwY.jpg" alt="Resort" /> -->
+        <img class="resort-image" src="https://fastly.4sqi.net/img/general/600x600/59012131_nON2mkA4b3IQSITJVybGPx9P7ZM4cTRAgnC-PyfyNwY.jpg" alt="Resort" />
       </div>
       {% if hotel %}
       <div class="details">

@@ -62,7 +62,7 @@ html, body{
     margin: 0 auto;
     max-width: 600px;
     padding: 1em 2.4em;
-    background-color:rgb(204, 219, 202);
+    background-color:rgba(204, 219, 202, 0.8);
 }
 .sub-heading{
     font-family: 'Caveat', cursive;
