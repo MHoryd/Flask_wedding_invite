@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,SelectField,FormField, HiddenField
 from wtforms.validators import DataRequired, Length
 
-food_choices = ['Ryba','Mięso']
+food_choices = ['Ryba','Mięso','Wege']
 
 class BaseForm(FlaskForm):
 
@@ -15,7 +15,7 @@ class BaseForm(FlaskForm):
 
 class AnonymForm(FlaskForm):
     base_form = FormField(BaseForm)
-    Field5 = StringField(label="Danie główne czyli dla kogo: ryba lub mięso",validators=[DataRequired(),Length(max=255)])
+    Field5 = StringField(label="Danie główne czyli dla kogo: ryba, wege lub mięso",validators=[DataRequired(),Length(max=255)])
     form_type = HiddenField()
 
 
